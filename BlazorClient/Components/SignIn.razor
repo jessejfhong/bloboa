@@ -1,0 +1,12 @@
+@inject IMediator Mediator
+
+<h3>Sign In</h3>
+
+<button @onclick="SignInAsync">Sign In</button>
+
+@code {
+    private async Task SignInAsync()
+    {
+        await Mediator.Send(new SignInAction("jesse", "123456"));
+    }
+}
