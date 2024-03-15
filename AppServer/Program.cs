@@ -1,18 +1,19 @@
 using System.Net;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.OpenApi.Models;
-
 using LooperCorp.AppServer;
 
-const string CorsPolicy = "AllowAny";
 
 var builder = WebApplication.CreateBuilder(args);
+var appConfig = builder.Configuration.Get<AppConfig>() ?? new AppConfig();
+if (!AppConfig.IsValid(appConfig)) return;
 
-var appConfig = builder.Configuration.Get<AppConfig>();
-if (appConfig is null || !AppConfig.IsValid(appConfig)) return;
+#if DEBUG
+builder.AddDevelopmentServices(appConfig.OpenApi);
+#endif
 
 builder.Services
+    .AddTransient<IExceptionHandler, GlobalExceptionHandler>()
     .AddExceptionHandler<GlobalExceptionHandler>()
     .AddProblemDetails()
     .ConfigureHttpJsonOptions(options =>
@@ -20,16 +21,14 @@ builder.Services
         options.SerializerOptions.IncludeFields = true;
         options.SerializerOptions.WriteIndented = true;
         options.SerializerOptions.PropertyNameCaseInsensitive = true;
-    });
-
-builder.Services
+    })
     .AddAuthorization()
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.Cookie.Name = "StockApp";
+        options.Cookie.Name = appConfig.Cookie.Name;
         options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromHours(12);
+        options.ExpireTimeSpan = TimeSpan.FromHours(appConfig.Cookie.ExpireHours);
         options.Events.OnRedirectToLogin = ctx =>
         {
             // return 401 instead of redirect to login path,
@@ -39,41 +38,19 @@ builder.Services
         };
     });
 
-builder.Services
-    .AddEndpointsApiExplorer()
-    .AddSwaggerGen(options =>
-    {
-        options.SwaggerDoc(appConfig.OpenApi.Version, new OpenApiInfo
-        {
-            Version = appConfig.OpenApi.Version,
-            Title = appConfig.OpenApi.Title,
-            Description = appConfig.OpenApi.Description
-        });
-    });
-
-builder.Services.AddCors(options =>
-    options.AddPolicy(CorsPolicy,
-        policy =>
-            policy.WithOrigins(appConfig.AllowedOrigins)
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials()));
-
-builder.Services
-    .AddTransient<IExceptionHandler, GlobalExceptionHandler>();
 
 var app = builder.Build();
-
 app.UseExceptionHandler()
+    .UseStaticFiles()
+    .UseBlazorFrameworkFiles()
     .UseRouting()
     .UseAuthentication()
-    .UseAuthorization()
-    .UseCors(CorsPolicy);
+    .UseAuthorization();
+app.MapApi()
+    .MapFallbackToFile("index.html");
 
-app.UseSwagger()
-    .UseSwaggerUI();
-
-app.MapApi();
-    //.RequireAuthorization();
+#if DEBUG
+app.UseDevelopmentMiddleware();
+#endif
 
 app.Run();

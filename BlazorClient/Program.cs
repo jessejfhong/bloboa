@@ -21,7 +21,7 @@ builder.Services
 
 var baseAddress = builder.HostEnvironment.BaseAddress;
 #if DEBUG
-baseAddress = "http://localhost:5200";
+baseAddress = "http://localhost:5200/";
 #endif
 builder.Services
     .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(Consts.ApiKey))

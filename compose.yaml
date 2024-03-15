@@ -2,12 +2,12 @@ version: '3'
 
 networks:
   default:
-    name: "BLOBOA-Network"
+    name: "BlobOA-Network"
 
 services:
-  appserver:
-    image: loopercorp/appserver:latest
-    container_name: AppServer
+  bloboa-server:
+    image: loopercorp/bloboa-server:latest
+    container_name: BlobOA-Server
     environment:
       - DOTNET_ENVIRONMENT=${DOTNET_ENVIRONMENT}
     ports:
@@ -19,28 +19,14 @@ services:
         - E=${DOTNET_ENVIRONMENT}
       dockerfile: ./AppServer/Dockerfile
 
-  emailserver:
-    image: loopercorp/emailserver:latest
-    container_name: EmailServer
-    environment:
-      - DOTNET_ENVIRONMENT=${DOTNET_ENVIRONMENT}
-    build:
-      context: ./
-      args:
-        - C=${CONFIGURATION}
-        - E=${DOTNET_ENVIRONMENT}
-      dockerfile: ./EmailServer/Dockerfile
-
-  proxyserver:
-    image: loopercorp/proxyserver:latest
-    container_name: ProxyServer
-    environment:
-      - DOTNET_ENVIRONMENT=${DOTNET_ENVIRONMENT}
-    ports:
-      - 5200:8080
-    build:
-      context: ./
-      args:
-        - C=${CONFIGURATION}
-        - E=${DOTNET_ENVIRONMENT}
-      dockerfile: ./ProxyServer/Dockerfile
+  # bloboa-emailserver:
+  #   image: loopercorp/bloboa-emailserver:latest
+  #   container_name: BlobOA-EmailServer
+  #   environment:
+  #     - DOTNET_ENVIRONMENT=${DOTNET_ENVIRONMENT}
+  #   build:
+  #     context: ./
+  #     args:
+  #       - C=${CONFIGURATION}
+  #       - E=${DOTNET_ENVIRONMENT}
+  #     dockerfile: ./EmailServer/Dockerfile

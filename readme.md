@@ -1,2 +1,2 @@
 # About
-**BLOBOA** aka Boring Line of Business Office Automation.
+**BlobOA** aka Boring Line of Business Office Automation.

@@ -11,16 +11,19 @@ internal static class MapApis
 {
     public static IEndpointRouteBuilder MapApi(this IEndpointRouteBuilder builder)
     {
-        builder.MapGet("/ping", () => "May the force be with you!");
+        builder.MapGet("ping", () => "May the force be with you!");
 
-        var auth = builder.MapGroup("/");
+        var app = builder.MapGroup("api/v1/")
+            .RequireAuthorization();
 
-        auth.MapPost("/signin", SignInAsync);
+        var auth = app.MapGroup("auth/");
+        auth.MapPost("signin", SignInAsync)
+            .AllowAnonymous();
 
         // add and extra parameter to workaround with https://github.com/dotnet/aspnetcore/issues/44970
         // since no session data is stored in server, calling this api
         // just simply clear the cookie in the browser.
-        auth.MapGet("/signout", async (int? _, HttpContext ctx) => await ctx.SignOutAsync());
+        auth.MapGet("signout", async (int? _, HttpContext ctx) => await ctx.SignOutAsync());
 
         return builder;
     }

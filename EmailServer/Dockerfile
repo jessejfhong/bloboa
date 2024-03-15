@@ -14,5 +14,5 @@ ARG E=Production
 ENV DOTNET_ENVIRONMENT=${E}
 WORKDIR /app
 COPY --from=build /app/publish ./
-ENTRYPOINT ./EmailServer
+ENTRYPOINT ./bloboa-emailserver
 
