@@ -1,4 +1,9 @@
+using BlobOA.Messages;
 using Microsoft.OpenApi.Models;
+using Proto;
+using Proto.DependencyInjection;
+using Proto.Remote;
+using Proto.Remote.GrpcNet;
 
 namespace LooperCorp.AppServer;
 
@@ -6,7 +11,7 @@ internal static class Extensions
 {
     const string CorsPolicy = "AllowedOrigins";
 
-    public static void AddDevelopmentServices(this WebApplicationBuilder builder, OpenApiInfo openApi)
+    internal static void AddDevelopmentServices(this WebApplicationBuilder builder, OpenApiInfo openApi)
     {
         builder.Services
             .AddEndpointsApiExplorer()
@@ -31,11 +36,26 @@ internal static class Extensions
                             .AllowCredentials()));
     }
 
-    public static void UseDevelopmentMiddleware(this IApplicationBuilder app)
+    internal static void UseDevelopmentMiddleware(this IApplicationBuilder app)
     {
         app.UseSwagger()
             .UseSwaggerUI()
             .UseCors(CorsPolicy)
             .UseWebAssemblyDebugging();
     }
+
+    internal static IServiceCollection AddActorSystem(this IHostApplicationBuilder builder) =>
+        builder.Services
+            .AddSingleton(sp =>
+            {
+                var actorSystemConfig = new ActorSystemConfig();
+                var remoteConfog = GrpcNetRemoteConfig
+                    .BindToLocalhost()
+                    .WithProtoMessages(MessagesReflection.Descriptor);
+
+                return new ActorSystem(actorSystemConfig)
+                    .WithServiceProvider(sp)
+                    .WithRemote(remoteConfog);
+            })
+            .AddSingleton(sp => sp.GetRequiredService<ActorSystem>().Root);
 }
