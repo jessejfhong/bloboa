@@ -3,32 +3,43 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using LooperCorp.Shared.Dtos;
+using BlobOA.Shared.Dtos;
 
-namespace LooperCorp.AppServer;
+namespace BlobOA.AppServer;
+
+internal class Services(
+    HttpContext httpContext,
+    ILogger<Services> logger)
+{
+    public HttpContext HttpContext { get; } = httpContext;
+    public ILogger<Services> Logger { get; } = logger;
+}
 
 internal static class MapApis
 {
     public static IEndpointRouteBuilder MapApi(this IEndpointRouteBuilder builder)
     {
-        builder.MapGet("ping", () => "May the force be with you!");
-
         var app = builder.MapGroup("api/v1/")
+            .WithTags("General")
             .RequireAuthorization();
 
-        var auth = app.MapGroup("auth/");
+        app.MapGet("ping", () => "May the force be with you!")
+            .AllowAnonymous();
+
+        var auth = app.MapGroup("auth/")
+            .WithTags("Auth");
         auth.MapPost("signin", SignInAsync)
             .AllowAnonymous();
 
         // add and extra parameter to workaround with https://github.com/dotnet/aspnetcore/issues/44970
         // since no session data is stored in server, calling this api
         // just simply clear the cookie in the browser.
-        auth.MapGet("signout", async (int? _, HttpContext ctx) => await ctx.SignOutAsync());
+        auth.MapGet("signout", SignOutAsync);
 
         return builder;
     }
 
-    public static async Task<Results<Ok<UserProfileDTO>, UnauthorizedHttpResult>> SignInAsync(
+    internal static async Task<Results<Ok<UserProfileDTO>, UnauthorizedHttpResult>> SignInAsync(
         [FromBody] LoginDTO dto,
         HttpContext ctx)
     {
@@ -50,4 +61,10 @@ internal static class MapApis
 
         return TypedResults.Ok(profile);
     }
+
+    internal static async Task<Ok> SignOutAsync([AsParameters] Services services)
+    {
+        await services.HttpContext.SignOutAsync();
+        return TypedResults.Ok();
+    }    
 }

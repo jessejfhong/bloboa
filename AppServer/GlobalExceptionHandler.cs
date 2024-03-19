@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LooperCorp.AppServer;
+namespace BlobOA.AppServer;
 
 internal sealed class GlobalExceptionHandler : IExceptionHandler
 {

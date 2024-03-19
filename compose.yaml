@@ -6,21 +6,22 @@ networks:
 
 services:
   bloboa-server:
-    image: loopercorp/bloboa-server:latest
+    image: bloboa-server:latest
     container_name: BlobOA-Server
     environment:
       - DOTNET_ENVIRONMENT=${DOTNET_ENVIRONMENT}
     ports:
-      - 5300:8080
+      - 5200:8080
     build:
       context: ./
       args:
-        - C=${CONFIGURATION}
-        - E=${DOTNET_ENVIRONMENT}
+        - C=${CONFIGURATION:?error}
+        - E=${DOTNET_ENVIRONMENT:?error}
       dockerfile: ./AppServer/Dockerfile
+      target: final-api
 
   # bloboa-emailserver:
-  #   image: loopercorp/bloboa-emailserver:latest
+  #   image: bloboa-emailserver:latest
   #   container_name: BlobOA-EmailServer
   #   environment:
   #     - DOTNET_ENVIRONMENT=${DOTNET_ENVIRONMENT}

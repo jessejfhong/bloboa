@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Messages\Messages.csproj" />
+    <ProjectReference Include="..\BlobOA.Shared.Messages\BlobOA.Shared.Messages.csproj" />
   </ItemGroup>
 
 </Project>

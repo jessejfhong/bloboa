@@ -1,7 +1,7 @@
 using FluentValidation;
 using Microsoft.OpenApi.Models;
 
-namespace LooperCorp.AppServer;
+namespace BlobOA.AppServer;
 
 internal sealed class AppConfig
 {

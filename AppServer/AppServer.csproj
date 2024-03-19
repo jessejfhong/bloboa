@@ -31,17 +31,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Messages\Messages.csproj" />
+    <!-- <ProjectReference Include="..\BlobOA.Shared.Messages\BlobOA.Shared.Messages.csproj" /> -->
+    <ProjectReference Include="..\BlobOA.Shared.Dtos\BlobOA.Shared.Dtos.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="../Shared/Dtos/UserProfileDTO.cs" Link="Dtos/UserProfileDTO.cs" />
-    <Compile Include="../Shared/Dtos/LoginDTO.cs" Link="Dtos/LoginDTO.cs" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)'=='Release'">
     <Content Update="appsettings.Development.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
   </ItemGroup>

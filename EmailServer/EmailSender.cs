@@ -1,4 +1,4 @@
-using BlobOA.Messages;
+using BlobOA.Shared.Messages;
 using Proto;
 
 namespace BlobOA.EmailServer;

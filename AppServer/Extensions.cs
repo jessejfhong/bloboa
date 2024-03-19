@@ -1,11 +1,11 @@
-using BlobOA.Messages;
+//using BlobOA.Shared.Messages;
 using Microsoft.OpenApi.Models;
-using Proto;
-using Proto.DependencyInjection;
-using Proto.Remote;
-using Proto.Remote.GrpcNet;
+// using Proto;
+// using Proto.DependencyInjection;
+// using Proto.Remote;
+// using Proto.Remote.GrpcNet;
 
-namespace LooperCorp.AppServer;
+namespace BlobOA.AppServer;
 
 internal static class Extensions
 {
@@ -44,18 +44,25 @@ internal static class Extensions
             .UseWebAssemblyDebugging();
     }
 
-    internal static IServiceCollection AddActorSystem(this IHostApplicationBuilder builder) =>
-        builder.Services
-            .AddSingleton(sp =>
-            {
-                var actorSystemConfig = new ActorSystemConfig();
-                var remoteConfog = GrpcNetRemoteConfig
-                    .BindToLocalhost()
-                    .WithProtoMessages(MessagesReflection.Descriptor);
+    internal static IApplicationBuilder UseBlazorEnvHeader(this IApplicationBuilder app, IWebHostEnvironment env) =>
+        app.Use(async (ctx, next) =>
+        {
+            ctx.Response.Headers.TryAdd("Blazor-Environment", env.EnvironmentName);
+            await next();
+        });
 
-                return new ActorSystem(actorSystemConfig)
-                    .WithServiceProvider(sp)
-                    .WithRemote(remoteConfog);
-            })
-            .AddSingleton(sp => sp.GetRequiredService<ActorSystem>().Root);
+    // internal static IServiceCollection AddActorSystem(this IHostApplicationBuilder builder) =>
+    //     builder.Services
+    //         .AddSingleton(sp =>
+    //         {
+    //             var actorSystemConfig = new ActorSystemConfig();
+    //             var remoteConfog = GrpcNetRemoteConfig
+    //                 .BindToLocalhost()
+    //                 .WithProtoMessages(MessagesReflection.Descriptor);
+
+    //             return new ActorSystem(actorSystemConfig)
+    //                 .WithServiceProvider(sp)
+    //                 .WithRemote(remoteConfog);
+    //         })
+    //         .AddSingleton(sp => sp.GetRequiredService<ActorSystem>().Root);
 }

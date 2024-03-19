@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "BlobOA.Messages";
+option csharp_namespace = "BlobOA.Shared.Messages";
 
 message Greeting {
     string From = 1;

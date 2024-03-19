@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
-using LooperCorp.AppServer;
+using BlobOA.AppServer;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,7 +40,13 @@ builder.Services
 
 
 var app = builder.Build();
+
+#if DEBUG
+app.UseDevelopmentMiddleware();
+#endif
+
 app.UseExceptionHandler()
+    .UseBlazorEnvHeader(app.Environment)
     .UseStaticFiles()
     .UseBlazorFrameworkFiles()
     .UseRouting()
@@ -48,9 +54,5 @@ app.UseExceptionHandler()
     .UseAuthorization();
 app.MapApi()
     .MapFallbackToFile("index.html");
-
-#if DEBUG
-app.UseDevelopmentMiddleware();
-#endif
 
 app.Run();
