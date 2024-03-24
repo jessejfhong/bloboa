@@ -1,4 +1,4 @@
-namespace LooperCorp;
+namespace BlobOA.BlazorClient;
 
 internal static class Consts
 {

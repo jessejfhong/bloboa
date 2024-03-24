@@ -1,10 +1,11 @@
-using LooperCorp;
-using LooperCorp.Application;
+using BlobOA.BlazorClient;
+using BlobOA.BlazorClient.Application;
+using BlobOA.BlazorClient.Application.Abstractions;
+using BlobOA.BlazorClient.Infrastructure;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using BlazorClient;
-using LooperCorp.Infrastructure;
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -28,7 +29,7 @@ builder.Services
     .AddHttpClient(Consts.ApiKey, client => client.BaseAddress = new Uri(baseAddress));
 
 builder.Services
-    .AddInfraServices();
+    .AddTransient<IAuthService, AuthService>();
 
 var app = builder.Build();
 

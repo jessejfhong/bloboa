@@ -1,4 +1,4 @@
-namespace LooperCorp.Domain;
+namespace BlobOA.BlazorClient.Domains;
 
 internal sealed class UserProfile
 {

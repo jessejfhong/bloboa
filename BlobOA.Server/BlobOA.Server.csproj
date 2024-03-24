@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>bloboa-server</AssemblyName>
+    <AssemblyName>BlobOA-Server</AssemblyName>
     <InvariantGlobalization>true</InvariantGlobalization>
     <SelfContained>false</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
@@ -21,17 +21,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.28" />
-    <PackageReference Include="FluentValidation" Version="11.9.0" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Proto.Actor" Version="1.6.0" />
-    <PackageReference Include="Proto.Remote" Version="1.6.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- <ProjectReference Include="..\BlobOA.Shared.Messages\BlobOA.Shared.Messages.csproj" /> -->
+    <ProjectReference Include="..\BlobOA.Application\BlobOA.Application.csproj" />
     <ProjectReference Include="..\BlobOA.Shared.Dtos\BlobOA.Shared.Dtos.csproj" />
   </ItemGroup>
 

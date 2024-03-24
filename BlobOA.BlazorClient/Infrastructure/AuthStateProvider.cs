@@ -1,8 +1,8 @@
 using System.Security.Claims;
-using LooperCorp.Domain;
+using BlobOA.BlazorClient.Domains;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace LooperCorp.Infrastructure;
+namespace BlobOA.BlazorClient.Infrastructure;
 
 internal sealed class AuthStateProvider : AuthenticationStateProvider
 {

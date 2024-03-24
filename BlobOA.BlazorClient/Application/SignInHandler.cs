@@ -1,7 +1,7 @@
-using LooperCorp.Application.Abstractions;
+using BlobOA.BlazorClient.Application.Abstractions;
 using MediatR;
 
-namespace LooperCorp.Application;
+namespace BlobOA.BlazorClient.Application;
 
 public sealed class SignInAction : MenuAction
 {

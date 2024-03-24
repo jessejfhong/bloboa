@@ -1,6 +1,6 @@
-﻿using LooperCorp.Application.Abstractions;
+﻿using BlobOA.BlazorClient.Application.Abstractions;
 
-namespace LooperCorp.Application;
+namespace BlobOA.BlazorClient.Application;
 
 internal class AuthService : IAuthService
 {

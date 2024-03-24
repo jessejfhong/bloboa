@@ -17,8 +17,8 @@ services:
       args:
         - C=${CONFIGURATION:?error}
         - E=${DOTNET_ENVIRONMENT:?error}
-      dockerfile: ./AppServer/Dockerfile
-      target: final-api
+      dockerfile: ./BlobOA.Server/Dockerfile
+      target: final-full
 
   # bloboa-emailserver:
   #   image: bloboa-emailserver:latest
